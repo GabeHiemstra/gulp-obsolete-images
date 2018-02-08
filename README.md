@@ -1,3 +1,9 @@
+note: with this fork I want to achieve the following:
+
+remove the forced output
+remove support for angular image source
+add support for data-src attribute commonly used in lazy-loading
+
 # Unused Images
 
 Attempts to list all the images that are not referenced in your html and css.

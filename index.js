@@ -12,7 +12,11 @@ function obsoleteImages(options) {
     options = options || {log: true};
     function addUsed(imageUrl) {
         if (!imageUrl.match(/(data|http|https):/)) {
-            usedImageNames.push(path.basename(imageUrl));
+            
+            var filename = (path.basename(imageUrl).match(/((?:((?:[^\(\\\'\"\r\n\t\f\/\s\.])+)\.(?:(png|gif|jpe?g|pdf|xml|apng|svg|mng)\b)))/gmi) || []).pop();
+            if (filename) {
+                usedImageNames.push(filename);
+            }
         }
     }
 

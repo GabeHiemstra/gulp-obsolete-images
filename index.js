@@ -30,6 +30,10 @@ function obsoleteImages(options) {
                 if (attribs.src) {
                     addUsed(attribs.src);
                 }
+                // commonly used in lazy-loading
+                if (attribs['data-src']) {
+                    addUsed(attribs['data-src']);
+                }
                 if (attribs['ng-src']) {
                     ngUsedImages.push(attribs['ng-src']);
                 }

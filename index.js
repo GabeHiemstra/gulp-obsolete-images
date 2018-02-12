@@ -6,9 +6,9 @@ var through2 = require('through2'),
     path = require('path'),
     _ = require('lodash');
 
-var PLUGIN_NAME = 'gulp-unused-images';
+var PLUGIN_NAME = 'gulp-obsolete-images';
 
-function unusedImages(options) {
+function obsoleteImages(options) {
     options = options || {log: true};
     function addUsed(imageUrl) {
         if (!imageUrl.match(/(data|http|https):/)) {
@@ -95,4 +95,4 @@ function unusedImages(options) {
     return transform;
 }
 
-module.exports = unusedImages;
+module.exports = obsoleteImages;

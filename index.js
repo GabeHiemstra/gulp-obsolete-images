@@ -30,11 +30,11 @@ function obsoleteImages(options) {
                     ngUsedImages.push(attribs['ng-src']);
                 }
             }
-			// eg shortcut icon apple-touch-icon, it doesnt matter if we add extras that are not images
+            // eg shortcut icon apple-touch-icon, it doesnt matter if we add extras that are not images
             else if (name === 'link' && attribs.href) {
                 addUsed(attribs.href);
             }
-			// eg msapplication-xxx
+            // eg msapplication-xxx
             else if (name === 'meta' && attribs.content) {
                 addUsed(attribs.content);
             }
@@ -44,6 +44,7 @@ function obsoleteImages(options) {
             }
         }
     });
+
 
     var transform = through2.obj(function (chunk, enc, callback) {
         var self = this;
@@ -64,6 +65,8 @@ function obsoleteImages(options) {
 
         try {
             var ast = css.parse(String(chunk.contents));
+            
+            // main rules
             ast.stylesheet.rules.forEach(function (rule) {
                 if (rule.type !== 'rule') {
                     return;
@@ -72,10 +75,32 @@ function obsoleteImages(options) {
                 rule.declarations.forEach(function (declaration) {
                     var match = declaration.value.match(/url\(("|'|)(.+?)\1\)/);
                     if (match) {
+                        console.log(match[2]);
                         addUsed(match[2]);
                     }
                 });
             });
+
+            // @media query declarations
+            ast.stylesheet.rules.forEach(function (media) {
+                if (media.type !== 'media') {
+                    return;
+                }
+                media.rules.forEach(function (rule) {
+                    if (rule.type !== 'rule') {
+                        return;
+                    }
+
+                    rule.declarations.forEach(function (declaration) {
+                        var match = declaration.value.match(/url\(("|'|)(.+?)\1\)/);
+                        if (match) {
+                            console.log(match[2]);
+                            addUsed(match[2]);
+                        }
+                    });
+                });
+            });
+
         }
         catch (e) {
             htmlParser.write(String(chunk.contents));
@@ -88,7 +113,7 @@ function obsoleteImages(options) {
     transform.on('finish', function () {
         var unused = _.difference(imageNames, usedImageNames);
         if (unused.length && options.log) {
-            this.emit('error', new Error('Unused images: ' + unused.join(', ') + '\nng-src: ' + ngUsedImages.join(', ')));
+            this.emit( 'error', new Error('Unused images: ' + unused.join(', ')) );
         }
     });
 

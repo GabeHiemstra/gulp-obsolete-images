@@ -83,7 +83,6 @@ function obsoleteImages(options) {
                 rule.declarations.forEach(function (declaration) {
                     var match = declaration.value.match(/url\(("|'|)(.+?)\1\)/);
                     if (match) {
-                        console.log(match[2]);
                         addUsed(match[2]);
                     }
                 });
@@ -102,7 +101,6 @@ function obsoleteImages(options) {
                     rule.declarations.forEach(function (declaration) {
                         var match = declaration.value.match(/url\(("|'|)(.+?)\1\)/);
                         if (match) {
-                            console.log(match[2]);
                             addUsed(match[2]);
                         }
                     });

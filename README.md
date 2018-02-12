@@ -1,11 +1,3 @@
-note: with this fork I want to achieve the following:
-
-remove the forced output
-
-remove support for angular image source
-
-add support for data-src attribute commonly used in lazy-loading
-
 # Unused Images
 
 List all images that are not referenced in your html and css. Images in HTML (or PHP) are found when used in the img[src] or img[data-src] attribute, as well as in the link[href] and meta[contact]. After being found, their names are matches starting from the first / to the end of the filename, if they have the following extension: .png, .gif, .jpg, .jpeg, .pdf, .xml, .apng, .svg or .mng.

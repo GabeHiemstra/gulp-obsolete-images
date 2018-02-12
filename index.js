@@ -4,16 +4,19 @@ var through2 = require('through2'),
     htmlparser2 = require('htmlparser2'),
     gutil = require('gulp-util'),
     path = require('path'),
+    print = require('pretty-print'),
+    del = require('del'),
     _ = require('lodash');
 
 var PLUGIN_NAME = 'gulp-obsolete-images';
 
 function obsoleteImages(options) {
-    options = options || {log: true};
+    options = options || {log: true, delete: false};
     function addUsed(imageUrl) {
         if (!imageUrl.match(/(data|http|https):/)) {
-            
-            var filename = (path.basename(imageUrl).match(/((?:((?:[^\(\\\'\"\r\n\t\f\/\s\.])+)\.(?:(png|gif|jpe?g|pdf|xml|apng|svg|mng)\b)))/gmi) || []).pop();
+
+            // Add filename as begigging from the first /
+            var filename = imageUrl.replace(/.*?(\/.+(png|gif|jpe?g|pdf|xml|apng|svg|mng))$/gi, "$1");
             if (filename) {
                 usedImageNames.push(filename);
             }
@@ -67,7 +70,8 @@ function obsoleteImages(options) {
         }
 
         if (mime.lookup(chunk.path).match(/image\//)) {
-            imageNames.push(path.basename(chunk.path));
+            //imageNames.push(path.basename(chunk.path));
+            imageNames.push(chunk.path);
             return callback();
         }
 
@@ -117,9 +121,33 @@ function obsoleteImages(options) {
     });
 
     transform.on('finish', function () {
-        var unused = _.difference(imageNames, usedImageNames);
+
+        var used = new Array();
+        for(i = 0; i < imageNames.length; i++){
+            for(j = 0; j < usedImageNames.length; j++){
+                if(imageNames[i].indexOf(usedImageNames[j]) !== -1){
+                    //console.log(imageNames[i]+' - '+'/'+usedImageNames[j]+'$/gi');
+                    used.push(imageNames[i]);
+                    break;
+                }
+            }
+        }
+
+        var unused = _.difference(imageNames, used);
+
+        // console.log(unused.join(', '));
+
         if (unused.length && options.log) {
-            this.emit( 'error', new Error('Unused images: ' + unused.join(', ')) );
+            print(unused, {
+                  leftPadding: 2,
+                  rightPadding: 3
+                });
+        }
+
+        if(options.delete){
+            for(i = 0; i < unused.length; i++){
+                del(unused[i]);
+            }
         }
     });
 

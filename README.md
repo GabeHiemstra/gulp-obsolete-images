@@ -6,7 +6,10 @@ Images with absolute urls will also be ignored.
 
 ## Show example
 
-Stream all the images, css and html files that you have into it, it emits errors, so use plumber to catch and see them
+Stream all the images, css and html files and show, line by line, the image files not used in your html files.
+
+	var gulp = require('gulp');
+	var obsoleteImages = require('gulp-obsolete-images');
 
 	gulp.task('clean:unused:show', function(){
 	  return gulp.src(['app/images/**/*', '.tmp/styles/**/*.css', 'app/*.html', 'app/partials/**/*.html'])
@@ -15,12 +18,19 @@ Stream all the images, css and html files that you have into it, it emits errors
 
 ## Delete example
 
+Stream all the images, css and html files and delete all unused images.
+
+	var gulp = require('gulp');
+	var obsoleteImages = require('gulp-obsolete-images');
+
 	gulp.task('clean:unused:show', function(){
 	  return gulp.src(['app/images/**/*', '.tmp/styles/**/*.css', 'app/*.html', 'app/partials/**/*.html'])
 	      .pipe(obsoleteImages({delete: true}));
 	});
 
 ## Combination with confirm example:
+
+First show all unused images, then prompt user whether to delete them. It uses two other plugins, so make sure you install them as well.
 
 	var gulp = require('gulp');
 	var obsoleteImages = require('gulp-obsolete-images');

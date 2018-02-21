@@ -116,11 +116,10 @@ function obsoleteImages(options) {
             htmlParser.write(String(chunk.contents));
         }
 
-        self.push(chunk);
+        // self.push(chunk);
         callback();
-    });
 
-    transform.on('finish', function () {
+    }).on('finish', function () {
 
         var used = new Array();
         for(i = 0; i < imageNames.length; i++){

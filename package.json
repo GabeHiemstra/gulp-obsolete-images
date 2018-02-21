@@ -1,6 +1,6 @@
 {
   "name": "gulp-obsolete-images",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "Forked from gulp-unused-images",
   "main": "index.js",
   "scripts": {
